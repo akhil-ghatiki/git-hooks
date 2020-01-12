@@ -1,0 +1,18 @@
+#!/bin/bash
+
+
+#Abort push when integration tests fail
+./gradlew integrationTest
+RESULT=$?
+if [ $RESULT -gt 0 ] ; then
+  echo "$(tput setaf 1)You have failing integration test(s). Please fix them and re-try pushing."
+  exit $RESULT
+fi
+
+#Abort push when contract tests fail
+./gradlew contractTest
+CONTRACT_RESULT=$?
+if [ $CONTRACT_RESULT -gt 0 ] ; then
+  echo "$(tput setaf 1)You have failing contract test(s). Please fix them and re-try pushing."
+fi
+exit $CONTRACT_RESULT
